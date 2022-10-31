@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Service\WondeService;
+use App\Services\WondeService as ServicesWondeService;
 use Illuminate\Support\ServiceProvider;
 
 class WondeServiceProvider extends ServiceProvider
@@ -14,8 +14,8 @@ class WondeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(WondeService::class, function () {
-            return new WondeService();
+        $this->app->singleton(ServicesWondeService::class, function () {
+            return new ServicesWondeService;
         });
     }
 

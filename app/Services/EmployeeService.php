@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Services\WondeService;
 use Exception;
 
-class StudentClassService
+class EmployeeService
 {
     /** 
      * @var WondeService 
@@ -21,30 +21,31 @@ class StudentClassService
     }
 
     /**
-     * @param array $params
+     * @param array $includes
+     * @param array $filters
      * @return array
      */
-    public function getClass(array $params)
+    public function getEmployee(array $includes, array $filters)
     {
         $responseData = [];
         $result = [];
 
         try {
-            $responseData = $this->wondeService->classes->all($params);
+            $responseData = $this->wondeService->employees->all($includes, $filters);
         } catch (Exception $e) {
             $message = $e->getMessage();
             echo $message;
             exit;
         }
 
-        // Get classes
-        foreach ($responseData as $class) {
+        // Get employee and classes
+        foreach ($responseData as $employee) {
             $result[] = [
-                'classId' => $class->id,
-                'className' => $class->name,
-                'students' => $class->students->data,
-                'teacher' => $class->employees->data,
-                'subject' => $class->subject
+                'id' => $employee->id,
+                'title' => $employee->title,
+                'surname' => $employee->surname,
+                'forename' => $employee->forename,
+                'classes' => $employee->classes->data
             ];
         }
 

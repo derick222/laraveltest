@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/wonde/test', [WondeController::class, 'index'])->name('wonde_page');
+Route::get('/wonde/test/', [WondeController::class, 'index'])->name('wonde_page');
