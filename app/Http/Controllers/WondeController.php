@@ -32,17 +32,29 @@ class WondeController extends Controller
     /**
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
 
         $employeeIncludes = ['classes'];
         $employeeFilters = ['has_class' => true];
 
-        $classesIncludes = ['students'];
-        $classesFilters = ['has_students' => true];
-
         return view('wonde', [
-            'employees' => $this->employeeService->getEmployee($employeeIncludes, $employeeFilters),
+            'employees' => $this->employeeService->getEmployee($employeeIncludes, $employeeFilters)
+        ]);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function showStudenst(Request $request)
+    {
+        $className = $request->get('className');
+        $classesIncludes = ['students'];
+        $classesFilters = ['has_students' => true, 'class_name' => $className];
+
+        return view('wondeStudentList', [
             'classes' => $this->classesService->getClass($classesIncludes, $classesFilters)
         ]);
     }

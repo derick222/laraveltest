@@ -14,20 +14,35 @@
     <script>
         $(function() {
 
-            $("#resultsStudentData").hide();
+            // getting the teacher and its classes at the same time to minimize server request limit call
             $('#selectTeacher').change(function() {
                 var $options = $('#selectClass').val('').find('option').show();
                 if (this.value != '0')
                     $options.not('[data-employee-id="' + this.value + '"],[data-employee-id=""]').hide();
             })
 
+            // select teacher class
             $("#selectClass").change(function() {
-                $("#resultsStudentData").show();
-                $("#table tbody tr").hide();
-                $("#table tbody tr." + $(this).val()).show('fast');
+                showStudentLists(this.value);
             });
 
         });
+
+
+        // get student list per teacher's class
+        function showStudentLists(className) {
+            $.ajax({
+                url: "{{ route('wondeStudentList_page') }}",
+                method: 'GET',
+                data: {
+                    className: className
+                },
+                dataType: 'html',
+                success: function(data) {
+                    $('#resultsStudentData').empty().html(data);
+                }
+            })
+        }
     </script>
 </head>
 
@@ -56,8 +71,8 @@
                         <option value="">--Please choose a class--</option>
                         @foreach ($employees as $employee)
                             @foreach ($employee['classes'] as $class)
-                                @if (isset($class->id))
-                                    <option value="{{ $class->id }}" data-employee-id="{{ $employee['id'] }}">
+                                @if (isset($class->name))
+                                    <option value="{{ $class->name }}" data-employee-id="{{ $employee['id'] }}">
                                         {{ $class->name }}</option>
                                 @endif
                             @endforeach
@@ -79,16 +94,6 @@
                         </tr>
                     </thead>
                     <tbody id="resultsStudentData">
-                        @foreach ($classes as $class)
-                            @foreach ($class['students'] as $student)
-                                <tr class="{{ $class['classId'] }}">
-                                    <th scope="row">{{ $loop->iteration }}</th>
-                                    <td>{{ $student->forename }}</td>
-                                    <td>{{ $student->surname }}</td>
-                                    <td>{{ $class['className'] }}</td>
-                                </tr>
-                            @endforeach
-                        @endforeach
                     </tbody>
                 </table>
             </div>
