@@ -17,7 +17,7 @@
             // getting the teacher and its classes at the same time to minimize server request limit call
             $('#selectTeacher').change(function() {
                 var $options = $('#selectClass').val('').find('option').show();
-                if (this.value != '0')
+                if (this.value != '')
                     $options.not('[data-employee-id="' + this.value + '"],[data-employee-id=""]').hide();
             })
 
